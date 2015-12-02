@@ -9,15 +9,15 @@ Gem::Specification.new do |s|
   s.version     = GemSort::VERSION
   s.authors     = ["kozo yamagata"]
   s.email       = ["tune002@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of GemSort."
-  s.description = "TODO: Description of GemSort."
+  s.homepage    = "https://github.com/kozo002/gem_sort"
+  s.summary     = "Sorting your gems in Gemfile (for Rails)"
+  s.description = "Sorting your gems in Gemfile (for Rails)"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 4.2.5"
+  s.add_dependency "rails", "~> 4.2"
 
   s.add_development_dependency "sqlite3"
 end

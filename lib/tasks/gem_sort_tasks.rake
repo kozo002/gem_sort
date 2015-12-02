@@ -1,4 +1,7 @@
-# desc "Explaining what the task does"
-# task :gem_sort do
-#   # Task goes here
-# end
+require 'gem_sort/sorter'
+
+namespace :gem do
+  task :sort do
+    GemSort::Sorter.new.sort!
+  end
+end
