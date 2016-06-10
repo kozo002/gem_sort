@@ -60,7 +60,7 @@ module GemSort
     end
 
     def magic_comment
-      "# -*- frozen_string_literal: true -*-\n"
+      "# frozen_string_literal: true\n"
     end
 
     def write_gemfile(text)
