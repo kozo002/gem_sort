@@ -55,8 +55,16 @@ module GemSort
       source_gemfile.read.split("\n").select{ |line| line != "" }
     end
 
+    def removal_comment_and_blank(text)
+      text.gsub(/#.*$/,'').gsub(/\n(\s|　)*\n/, "\n")
+    end
+
+    def magic_comment
+      "# frozen_string_literal: true\n"
+    end
+
     def write_gemfile(text)
-      source_gemfile.write(text)
+      source_gemfile.write(magic_comment + removal_comment_and_blank(text))
     end
 
     def sort!
