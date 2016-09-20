@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gem_sort (0.1.0)
+    gem_sort (0.2.0)
       rails
 
 GEM
