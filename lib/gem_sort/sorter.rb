@@ -98,12 +98,18 @@ module GemSort
         wrap_block(source_block, inside)
       }
 
-      source_line = extract_line!(gemfile, -> (line) {
-        line.start_with?('source') && !line.end_with?('do')
+      git_source_blocks = extract_line!(gemfile, -> (line) {
+        line.start_with?('git_source') && !line.include?('do')
       })
 
-      git_source_line = extract_line!(gemfile, -> (line) {
-        line.start_with?('git_source')
+      git_source_blocks = extract_blocks!(gemfile, -> (line) {
+        line.start_with?("git_source")
+      }).map{ |group_block|
+        sort_block_gems(group_block)
+      } if git_source_blocks.nil?
+
+      source_line = extract_line!(gemfile, -> (line) {
+        line.start_with?('source') && !line.end_with?('do')
       })
 
       ruby_line = extract_line!(gemfile, -> (line) {
@@ -115,7 +121,7 @@ module GemSort
       })
 
       sorted_text = inject_between([
-        [source_line, git_source_line],
+        [source_line, git_source_blocks],
         [ruby_line, rails_line],
         sort_gems(gemfile),
         inject_between(group_blocks, nil),
