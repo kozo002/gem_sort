@@ -24,7 +24,7 @@ module GemSort
     end
 
     def sort_block_gems(block)
-      wrap_block(block, unwrap_block(block).sort)
+      wrap_block(block, sort_gems(unwrap_block(block)))
     end
 
     def wrap_block(block, inside)
@@ -47,8 +47,16 @@ module GemSort
       }
     end
 
+    def sort_gems(gems)
+      gems.each { |line| line.gsub!(/\"/,"'") }.sort
+    end
+
     def source_gemfile
       ::Rails.root.join('Gemfile').open('r+')
+    end
+
+    def initialized_gemfile
+      ::Rails.root.join('Gemfile').open('w')
     end
 
     def read_gemfile
@@ -56,7 +64,7 @@ module GemSort
     end
 
     def removal_comment_and_blank(text)
-      text.gsub(/#.*$/,'').gsub(/\n(\s|　)*\n/, "\n")
+      text.gsub(/#[^{].*$/,'').gsub(/\n(\s|　)*\n/, "\n\n").gsub(/( |　)+/, ' ')
     end
 
     def magic_comment
@@ -64,8 +72,9 @@ module GemSort
     end
 
     def write_gemfile(text)
-      source_gemfile.write(magic_comment + removal_comment_and_blank(text))
+      initialized_gemfile.write(magic_comment + removal_comment_and_blank(text))
     end
+
 
     def sort!
       gemfile = read_gemfile
@@ -93,6 +102,10 @@ module GemSort
         line.start_with?('source') && !line.end_with?('do')
       })
 
+      git_source_line = extract_line!(gemfile, -> (line) {
+        line.start_with?('git_source')
+      })
+
       ruby_line = extract_line!(gemfile, -> (line) {
         line.start_with?('ruby')
       })
@@ -102,9 +115,9 @@ module GemSort
       })
 
       sorted_text = inject_between([
-        source_line,
+        [source_line, git_source_line],
         [ruby_line, rails_line],
-        gemfile.sort,
+        sort_gems(gemfile),
         inject_between(group_blocks, nil),
         inject_between(source_blocks, nil)
       ], nil).flatten.join("\n")
