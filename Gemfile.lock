@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gem_sort (0.2.0)
+    gem_sort (0.3.0)
       rails
 
 GEM
@@ -115,4 +115,4 @@ DEPENDENCIES
   gem_sort!
 
 BUNDLED WITH
-   1.12.4
+   1.16.4
